@@ -1,15 +1,12 @@
 require 'json'
 require 'erb'
 
-def mayor_data
-    mayors = JSON::parse(File.read('data/mayors.json'))
-    titles = mayors.first.keys.reject{ |k| k[-1] != "?" }.map(&:to_s)
-
-    return mayors, titles
+def candidates_data
+    JSON.parse(File.read('data/candidates.json'))
 end
 
 def measures_data
-    return JSON::parse(File.read('data/measures.json'))
+    JSON.parse(File.read('data/measures.json'))
 end
 def _get_ordinal n
     n = n.to_i
@@ -23,20 +20,21 @@ class Controller
     def set_meta meta_data=nil
         meta_data ||= {}
 
-        default_description = ("Vote by Tuesday, April 7th in the Chicago "+
-                               "City Runoff Election. Check out our voter "+
+        default_description = ("Vote by Tuesday, May 9th in the San "+
+                               "Antonio City Election. Check out our voter "+
                                "guide to see who and what will be on your "+
                                "ballot.")
 
-        default_title = '2015 Chicago Voter Guide'
+        default_title = '2015 San Antonio Voter Guide'
 
-        default_image = 'http://www.chicagovoterguide.org/images/sharable.png'
+        default_image = 'http://www.sanantoniovoterguide.org/images/sharable.png'
 
         @meta = {
             "title" => meta_data['title'] || default_title,
             "description" => meta_data['description'] || default_description,
             "image" => ("#{meta_data['image'] || default_image}"),
-            "url" => ("#{meta_data['url'] || 'http://www.chicagovoterguide.org'}")
+            "url" => ("#{meta_data['url'] ||
+                         'http://www.sanantoniovoterguide.org'}")
         }
         render('_meta.erb')
     end
@@ -47,38 +45,45 @@ class Controller
 
     def index
         @meta_partial = set_meta
-        @mayors, @questions = mayor_data
+        candidates = candidates_data
+        @mayors = candidates.select{ |can| can['office'] == 'mayor' }
+        @counselors = candidates.reject{ |can| can['office'] == 'mayor' }
+        @counselors =  @counselors.group_by{ |can| can['office'] }
+        @measures = measures_data
     end
 
-    def mayor mayor
-        base = "http://www.chicagovoterguide.org"
+    def measure measure
+        base = "http://www.sanantoniovoterguide.org"
 
-        @anchor = mayor["name"].downcase.gsub(' ','-').gsub(/[^a-zA-Z0-9\-]/,'')
-        @filename = "mayor/#{@anchor}"
+        @anchor =  (measure['title'].downcase.gsub(' ','-')
+                    .gsub(/[^a-zA-Z0-9\-]/,''))
+        @filename = "measure/#{measure['choice']}-#{@anchor}"
         @meta_partial = set_meta({
             'url' => "#{base}/sharing/#{@filename}",
-            'image' => "#{base}#{mayor['photo']}",
-            'title' => "Vote for #{mayor['name']} for Mayor of Chicago",
-            'description' => ("I'm supporting #{mayor['name']} for Mayor of "+
-                              "Chicago - and so is "+
-                              "#{mayor['endorsements'].join(', ')}"),
+            'image' => "#{base}/images/#{measure['choice']}.png",
+            'title' => "Vote #{measure['choice']} for #{measure['title']}",
+            'description' => ("I'm supporting #{measure['choice']} on "
+                              "#{measure['title']}. A "+
+                              "#{measure['choice']} Vote means: "+
+                              "#{measure['explanation']}"),
         })
     end
 
-    def alderman alderman
-        base = "http://www.chicagovoterguide.org"
+    def candidate candidate
+        base = "http://www.sanantoniovoterguide.org"
 
-        name = [alderman['first'], alderman['last']].join(' ')
+        name = candidate['name']
         link = name.downcase.gsub(' ','-').gsub(/[^a-zA-Z0-9\-]/,'')
-        office = "#{_get_ordinal(alderman['ward'])} Ward Alderman"
-        @anchor =  "@#{alderman['ward']}"
-        @filename = "alderman/#{alderman['ward']}-#{link}"
+        @anchor =  "@!#{candidate['name']}"
+        @filename = "candidate/#{candidate['office']}-#{link}"
 
         @meta_partial = set_meta({
             'url' => "#{base}/sharing/#{@filename}",
-            'image' => "#{base}/#{alderman['photo']}",
-            'title' => "Vote #{name} for #{office}",
-            'description' => "Vote #{name} for #{office} - and you should too",
+            'image' => "#{base}/#{candidate['photo']}",
+            'title' => "Vote #{name} for #{candidate['office display name']}",
+            'description' => ("I'm supporting #{name} for "+
+                              "#{candidate['office display name']} - and "+
+                              "you should too"),
         })
     end
 

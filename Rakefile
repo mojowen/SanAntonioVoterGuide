@@ -12,42 +12,20 @@ task :serve do
     server.start
 end
 
-task :mayors do
-    mayors, _ = mayor_data
-
-    markdown = [[]]
-
-    mayors.first.keys.each do |key|
-        markdown.first.push(key.to_s.capitalize)
-    end
-
-    markdown.push(Array.new(mayors.first.keys.length,'---'))
-    mayors.each do |mayor|
-        markdown.push([])
-        mayor.each do |k,v|
-            if k == "photo"
-                markdown.last.push("![](#{v})")
-            else
-                markdown.last.push(v.respond_to?('join') ? v.join(',') : v)
-            end
-        end
-    end
-
-    File.open('mayors.md','w') do |fl|
-        fl.write(markdown.map{ |r| "|#{r.join('|')}|" }.join("\n"))
-    end
-end
-
-task :alderpeople do
-    alderpeople = []
-    CSV.foreach("data/alderpeople.csv",
+def csv_to_json filename
+    list = []
+    CSV.foreach("data/#{filename}.csv",
                 :headers => true) do |row|
-         alderpeople.push Hash[row.headers.map(&:downcase).zip(row.fields.map)]
+         list.push (Hash[row.headers.map(&:downcase).map(&:strip)
+                    .zip(row.fields.map)])
     end
-    File.open('data/alderpeople.json','w') do |fl|
-        fl.write(alderpeople.to_json)
+    File.open("data/#{filename}.json",'w') do |fl|
+        fl.write(list.to_json)
     end
     Rake::Task["all"]
+end
+task :candidates do
+    csv_to_json 'candidates'
 end
 
 task :erb, :paths do |t,args|
@@ -70,7 +48,7 @@ task :erb, :paths do |t,args|
     end
 end
 
-task :all do
+task :all => [:candidates] do
     """
     Rebuild all the HTML pages.
     """
@@ -79,13 +57,11 @@ task :all do
 end
 
 task :sharing do
-    mayors, _ = mayor_data()
 
     build = {
-        'mayor' => mayors,
-        'alderman' => JSON::parse(File.read('data/alderpeople.json'))
+        'candidate' => candidates_data,
+        'measure' => measures_data.flatten(1),
     }
-
 
     FileUtils.rm_r 'sharing' if Dir.exists?("sharing")
     Dir.mkdir "sharing"

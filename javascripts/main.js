@@ -17,8 +17,8 @@
             if (turf.inside(point, the_district)) {
                 var center = turf.centroid(the_district).geometry.coordinates
                 mapIt(the_district, center, [lng, lat]);
-                renderCounselors(i);
-                return districts[i];
+                renderCounselors(the_district.properties.District.toString());
+                return the_district;
             }
         }
         new_map([lng, lat]);
@@ -247,7 +247,7 @@
     document.body.onload = function() {
         search_form.onsubmit = searchSubmit;
 
-        tinyGET('/data/district_shapes.json',{},
+        tinyGET('/data/cosa.json',{},
             function(data) { districts = data; when_ready(); });
 
         if( document.location.hash.length > 0 ) {
