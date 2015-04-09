@@ -31,11 +31,13 @@ def retrieve_from_url(person, path)
 
     begin
         open(path, 'User-Agent' => 'ruby') do |remote_file|
-            File.open(filename, "wb") do |local_file|
-                local_file.puts remote_file.read
+            if remote_file.length > 0
+                File.open(filename, "wb") do |local_file|
+                    local_file.puts remote_file.read
+                end
+                return filename
             end
         end
-        return filename
     rescue => e
         puts "Could not open #{path} for #{person['name']}"
     end
