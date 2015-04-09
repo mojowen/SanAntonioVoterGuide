@@ -27,7 +27,8 @@ class Controller
 
         default_title = '2015 San Antonio Voter Guide'
 
-        default_image = 'http://www.sanantoniovoterguide.org/images/sharable.png'
+        default_image = ('http://www.sanantoniovoterguide.org/images'
+                         '/shareable.png')
 
         @meta = {
             "title" => meta_data['title'] || default_title,

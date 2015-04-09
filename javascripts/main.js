@@ -33,7 +33,7 @@
     function new_map(center) {
         map_canvas.style.display = 'block';
         var map = new google.maps.Map(map_canvas, {
-            zoom: 12,
+            zoom: 11,
             center: new google.maps.LatLng(center[1], center[0]),
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             scrollwheel: false,
@@ -126,7 +126,7 @@
             track +=  '-'+office.toLowerCase().replace(/\s/g,'-')
         }
 
-        link = "http://www.denvervoterguide.org"+link
+        link = "http://www.sanantoniovoterguide.org"+link
         link += '?utm_source=endorse'
         link += '&utm_campaign='+track
 
@@ -192,12 +192,12 @@
         map_canvas.innerHTML = "";
 
         var address = this.address.value;
-        if( address.toLowerCase().search('denver') === -1 ) {
-            address += ' Denver CO'
+        if( address.toLowerCase().search('San Antonio') === -1 ) {
+            address += ' San Antonio TX'
         }
         if( address.toLowerCase().search('il') === -1 ||
                 address.toLowerCase().search('illinois') === -1 ) {
-            address += ' CO'
+            address += ' TX'
         }
 
         geocoder.geocode({
