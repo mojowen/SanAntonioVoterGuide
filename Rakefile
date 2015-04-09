@@ -4,6 +4,7 @@ require 'json'
 require 'webrick'
 
 load 'controller.rb'
+load 'photos.rb'
 
 task :serve do
     port = ARGV[1] || 8080
@@ -14,17 +15,34 @@ end
 
 def csv_to_json filename
     list = []
-    CSV.foreach("data/#{filename}.csv",
-                :headers => true) do |row|
+    CSV.foreach("data/#{filename}.csv", :headers => true) do |row|
          list.push (Hash[row.headers.map(&:downcase).map(&:strip)
                     .zip(row.fields.map)])
     end
     File.open("data/#{filename}.json",'w') do |fl|
         fl.write(list.to_json)
     end
-    Rake::Task["all"]
+end
+def download_csv_photos filename
+    candidates = []
+
+    Dir.mkdir 'images/candidates' unless Dir.exists?("images/candidates")
+
+    CSV.foreach("data/#{filename}.csv", :headers => true) do |row|
+        candidate = (Hash[row.headers.map(&:downcase).map(&:strip)
+                     .zip(row.fields.map)])
+        grab_photo candidate
+        candidates.push candidate
+    end
+    CSV.open("data/#{filename}.csv", "w") do |csv|
+      csv << candidates.first.keys
+      candidates.each do |candidate|
+        csv << candidate.values
+      end
+    end
 end
 task :candidates do
+    download_csv_photos 'candidates'
     csv_to_json 'candidates'
 end
 

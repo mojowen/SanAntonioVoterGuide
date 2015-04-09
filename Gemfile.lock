@@ -1,6 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.8)
+    buftok (0.2.0)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chunky_png (1.3.3)
@@ -20,7 +22,10 @@ GEM
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
+    equalizer (0.0.11)
     eventmachine (1.0.7)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.6)
     formatador (0.2.5)
     gridle (1.3.36)
@@ -45,14 +50,21 @@ GEM
       guard (>= 2.8.0)
       sass (>= 3.1)
     hitimes (1.2.2)
+    http (0.6.4)
+      http_parser.rb (~> 0.6.0)
     http_parser.rb (0.6.0)
+    json (1.8.2)
     listen (2.8.5)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     lumberjack (1.0.9)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
     multi_json (1.10.1)
+    multipart-post (2.0.0)
+    naught (1.0.0)
     nenv (0.2.0)
     notiffany (0.0.5)
       nenv (~> 0.1)
@@ -67,10 +79,23 @@ GEM
       ffi (>= 0.5.0)
     sass (3.4.12)
     shellany (0.0.1)
+    simple_oauth (0.3.1)
     slop (3.6.0)
     thor (0.19.1)
+    thread_safe (0.3.5)
     timers (4.0.1)
       hitimes
+    twitter (5.14.0)
+      addressable (~> 2.3)
+      buftok (~> 0.2.0)
+      equalizer (~> 0.0.9)
+      faraday (~> 0.9.0)
+      http (~> 0.6.0)
+      http_parser.rb (~> 0.6.0)
+      json (~> 1.8)
+      memoizable (~> 0.4.0)
+      naught (~> 1.0)
+      simple_oauth (~> 0.3.0)
 
 PLATFORMS
   ruby
@@ -83,3 +108,4 @@ DEPENDENCIES
   guard-sass
   rake
   sass
+  twitter
