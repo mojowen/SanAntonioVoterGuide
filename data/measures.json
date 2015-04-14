@@ -13,19 +13,6 @@
     "recommendation": "yes"
   },
   {
-    "title": "Charter Amendment 2",
-    "description" : "City Council Pay",
-    "choices": {
-      "yes": {
-        "explanation": "Effective July 1st, City Councilors will be paid $45,722 per year and the Mayor will be paid $61,725."
-      },
-      "no": {
-        "explanation": "City Councilor and Mayoral pay will stay the same: Councilors will earn $1,040 per year and the Mayor will earn $4,040 per year. "
-      }
-    },
-    "recommendation": "yes"
-  },
-  {
     "title": "Proposition 2",
     "description" : "Linear Trails Program",
     "choices": {
@@ -47,6 +34,19 @@
       },
       "no": {
         "explanation": "City Council can decide to approve or fail railway projects in San Antonio"
+      }
+    },
+    "recommendation": "yes"
+  },
+  {
+    "title": "Charter Amendment 2",
+    "description" : "City Council Pay",
+    "choices": {
+      "yes": {
+        "explanation": "Effective July 1st, City Councilors will be paid $45,722 per year and the Mayor will be paid $61,725."
+      },
+      "no": {
+        "explanation": "City Councilor and Mayoral pay will stay the same: Councilors will earn $1,040 per year and the Mayor will earn $4,040 per year. "
       }
     },
     "recommendation": "yes"
