@@ -71,6 +71,34 @@
         </div>
       <% end %>
     </div>
+    <div class="issues">
+      <div class="scroll">
+        <table>
+        <thead>
+          <tr>
+            <th></th>
+            <% @mayors.reject{ |m| m[@questions.first.downcase].nil? }.each do |mayor| %>
+              <th>
+                <div class="img" style="background-image: url('<%= mayor["photo"] %>');" ></div>
+                <h4><%= mayor["name"] %></h4>
+              </th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% @questions.each do |question| %>
+            <tr>
+              <td class="question"><%= question.capitalize %></td>
+                <% @mayors.reject{ |m| m[@questions.first.downcase].nil? }.each do |mayor| %>
+                  <td><%= mayor[question.downcase] %></td>
+                <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+        </table>
+      </div>
+    </div>
+</div>
   </div>
   <div class="measures section">
     <div class="inner">

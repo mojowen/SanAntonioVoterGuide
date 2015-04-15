@@ -2,7 +2,10 @@ require 'json'
 require 'erb'
 
 def candidates_data
-    JSON.parse(File.read('data/candidates.json'))
+    candidates = JSON.parse(File.read('data/candidates.json'))
+    questions = candidates.first.keys.reject{ |k| k[-1] != "?" }.map(&:to_s)
+
+    return candidates, questions
 end
 
 def measures_data
@@ -47,7 +50,7 @@ class Controller
 
     def index
         @meta_partial = set_meta
-        candidates = candidates_data
+        candidates, @questions = candidates_data
         @mayors = candidates.select{ |can| can['office'] == 'mayor' }
         @counselors = candidates.reject{ |can| can['office'] == 'mayor' }
         @counselors =  @counselors.group_by{ |can| can['office'] }

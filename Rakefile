@@ -75,9 +75,10 @@ task :all => [:candidates] do
 end
 
 task :sharing do
+    candidates, _ = candidates_data
 
     build = {
-        'candidate' => candidates_data,
+        'candidate' => candidates,
         'measure' => measures_data.flatten(1),
     }
 
