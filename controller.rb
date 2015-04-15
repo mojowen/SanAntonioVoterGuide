@@ -34,8 +34,9 @@ class Controller
             "title" => meta_data['title'] || default_title,
             "description" => meta_data['description'] || default_description,
             "image" => ("#{meta_data['image'] || default_image}"),
-            "url" => ("#{meta_data['url'] ||
-                         'http://www.sanantoniovoterguide.org'}")
+            "url" => (meta_data['url'] || 'http://www.sanantoniovoterguide.org'),
+            "twitter_name" => 'movesanantonio',
+            "twitter_hashtag" => 'sanantoniovotes',
         }
         render('_meta.erb')
     end
