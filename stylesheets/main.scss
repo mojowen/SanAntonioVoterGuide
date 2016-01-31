@@ -13,6 +13,7 @@
     }
 }
 .clear { @include clear(); }
+
 @mixin frame($size) {
     width: $size;
     height: $size;
@@ -123,14 +124,13 @@ body {
     @include gridle(6);
     @include gridle(10, tablet);
     @include gridle_centered(tablet);
-    min-height: 120px;
+    min-height: 470px;
     margin-bottom: 50px;
-    @include gridle_state(tablet) {
-        min-height: 200px;
-    }
+
     .social {
-        text-align: center;
-        @include gridle(12);
+        text-align: left;
+        @include gridle(8);
+        @include gridle_float (right);
 
         @include gridle_state(mobile) { text-align: center; padding-left: 0;}
 
@@ -146,90 +146,13 @@ body {
     .bio {
         padding-left: 0;
         padding-right: 0;
-        min-height: 120px;
-        @include gridle(12);
+        min-height: 170px;
+        @include gridle(12, mobile);
+        @include gridle(6);
     }
     .img {
         @include frame(100px);
         margin: 0 auto;
-    }
-}
-.counselor {
-    @include gridle(4);
-    @include gridle(6, tablet);
-    @include gridle(10, mobile);
-    text-align: center;
-    div.img {
-        @include frame(60px);
-        min-height: 60px;
-        margin: 0 auto;
-        display: block;
-    }
-    margin-bottom: 40px;
-
-    a {
-        font-size: 12px;
-        padding: 0 4px;
-        &:before { margin-right: 2px; }
-    }
-    .bio {
-        margin: 20px 0;
-    }
-    min-height: 150px;
-    &.row-1 { @include gridle_push(4); }
-    &.row-2 {
-        @include gridle_push(2);
-        @include gridle_push(0, tablet);
-    }
-}
-.district {
-    @include clear();
-    margin: 50px 0;
-}
-.measure {
-    @include gridle(12);
-
-    .choice { margin: 30px 0; @include gridle(12); }
-    .thumb {
-        @include gridle(1);
-        @include gridle_centered(mobile);
-        @include gridle_state(mobile) { padding-bottom: 20px; }
-    }
-    .explanation {
-        @include gridle(10);
-        @include gridle(11, tablet);
-        @include gridle(12, mobile);
-        @include gridle_push(1, tablet);
-        @include gridle_push(0, mobile);
-    }
-    h4 { color: $second-emphasis; }
-    h2, h4, h5 { span { text-transform: uppercase; }}
-    span.fa {
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
-        margin: 10px 0 0 -30px;
-        &.no { background: $color-no; }
-        &.yes { background: $color-yes; }
-        text-align: center;
-        font-size: 30px;
-        color: white;
-        &:before { line-height: 50px; }
-    }
-    .recommendation {
-        text-align: left;
-        span.fa { margin: 0; }
-        span.yay-or-nay {
-            &.no { color: $color-no; }
-            &.yes { color: $color-yes; }
-        }
-        @include gridle_state(mobile) {
-            text-align: center;
-            span {
-                display: block;
-                margin: 30px auto !important;
-            }
-        }
     }
 }
 #search_form {
@@ -251,6 +174,35 @@ body {
     }
     @include clear();
     margin-bottom: 30px;
+}
+.counselor {
+    @include gridle(4);
+    @include gridle(6, tablet);
+    @include gridle(10, mobile);
+    text-align: center;
+    div.img {
+        @include frame(60px);
+        min-height: 60px;
+        margin: 0 auto;
+        display: block;
+    }
+    min-height: 160px;
+    margin-bottom: 40px;
+
+    a {
+        font-size: 12px;
+        padding: 0 4px;
+        &:before { margin-right: 2px; }
+    }
+    .bio {
+        margin: 20px 0;
+    }
+    min-height: 300px;
+    &.row-1 { @include gridle_push(4); }
+    &.row-2 {
+        @include gridle_push(2);
+        @include gridle_push(0, tablet);
+    }
 }
 .map_container {
     margin: 50px 0 0;
@@ -281,7 +233,6 @@ body {
 }
 a.vote_for {
     position: absolute;
-    bottom: -10px;
     left: 50%;
     width: 84px;
     margin-left: -42px;

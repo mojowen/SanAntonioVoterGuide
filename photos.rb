@@ -4,15 +4,15 @@ require 'twitter'
 
 
 def make_filename candidate
-    ("#{candidate['office']}-"+
-     "#{candidate['name'].gsub(' ','-').gsub(/[^a-zA-Z0-9\-]/,'')}")
+    "#{candidate['office']}-#{candidate['name']}"
+    .gsub(' ','-').gsub(/[^a-zA-Z0-9\-]/,'')
 end
 
-def grab_photo(person)
-    if person['photo']
-        unless File.exists?(person['photo'])
-            photo = retrieve_from_url person, person['photo']
-            person['photo'] = photo || nil
+def grab_photo(person, field='photo')
+    if person[field]
+        unless File.exists?(person[field])
+            photo = retrieve_from_url person, person[field]
+            person[field] = photo || nil
         end
     end
     retrieve_from_facebook person if person['faceook'] && person['photo'].nil?

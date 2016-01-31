@@ -31,7 +31,7 @@ def download_csv_photos filename
     CSV.foreach("data/#{filename}.csv", :headers => true) do |row|
         candidate = (Hash[row.headers.map(&:downcase).map(&:strip)
                      .zip(row.fields.map)])
-        grab_photo candidate
+        grab_photo candidate, 'image url'
         candidates.push candidate
     end
     CSV.open("data/#{filename}.csv", "w") do |csv|
@@ -42,10 +42,9 @@ def download_csv_photos filename
     end
 end
 task :candidates do
-    download_csv_photos 'candidates'
+    # download_csv_photos 'candidates'
     csv_to_json 'candidates'
 end
-
 task :erb, :paths do |t,args|
     """
     Rebuild HTML pages.
@@ -79,7 +78,6 @@ task :sharing do
 
     build = {
         'candidate' => candidates,
-        'measure' => measures_data.flatten(1),
     }
 
     FileUtils.rm_r 'sharing' if Dir.exists?("sharing")

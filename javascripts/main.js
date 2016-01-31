@@ -126,7 +126,7 @@
             track +=  '-'+office.toLowerCase().replace(/\s/g,'-')
         }
 
-        link = "http://www.sanantoniovoterguide.org"+link
+        link = baseurl+link
         link += '?utm_source=endorse'
         link += '&utm_campaign='+track
 
@@ -192,12 +192,12 @@
         map_canvas.innerHTML = "";
 
         var address = this.address.value;
-        if( address.toLowerCase().search('San Antonio') === -1 ) {
-            address += ' San Antonio TX'
+        if( address.toLowerCase().search(city.toLowerCase()) === -1 ) {
+            address += [null, city, state_abv].join(' ')
         }
-        if( address.toLowerCase().search('il') === -1 ||
-                address.toLowerCase().search('illinois') === -1 ) {
-            address += ' TX'
+        if( address.search(state_abv) === -1 ||
+                address.toLowerCase().search(state.toLowerCase()) === -1 ) {
+            address += [null, state_abv].join(' ')
         }
 
         geocoder.geocode({
@@ -247,9 +247,6 @@
     document.body.onload = function() {
         search_form.onsubmit = searchSubmit;
 
-        tinyGET('/data/cosa.json',{},
-            function(data) { districts = data; when_ready(); });
-
         if( document.location.hash.length > 0 ) {
             if( document.location.hash[1] != '!' ) {
                 search_form.address.value = document.location.hash.replace('#','').replace(/\+/g,' ')
@@ -259,7 +256,7 @@
                     when_ready( function() {
                         specifyWard(document.location.hash.replace(/[^0-9]/g,''))
                         var old_link = document.location.hash
-                        document.location.hash = 'counselors'
+                        document.location.hash = 'counselors' // Hack to make it scroll
                         document.location.hash = old_link
                     });
                 }

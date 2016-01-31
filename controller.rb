@@ -3,11 +3,7 @@ require 'erb'
 
 def candidates_data
     candidates = JSON.parse(File.read('data/candidates.json'))
-    questions = candidates.first.keys.reject{ |k| k[-1] != "?" }.map(&:to_s)
-
-    return candidates, questions
 end
-
 def measures_data
     JSON.parse(File.read('data/measures.json'))
 end
@@ -20,27 +16,16 @@ end
 
 class Controller
 
+    def initialize
+        self.load_config
+    end
+
     def set_meta meta_data=nil
-        meta_data ||= {}
-
-        default_description = ("Vote by Tuesday, May 9th in the San "+
-                               "Antonio City Election. Check out our voter "+
-                               "guide to see who and what will be on your "+
-                               "ballot.")
-
-        default_title = '2015 San Antonio Voter Guide'
-
-        default_image = ('http://www.sanantoniovoterguide.org/images'
-                         '/shareable.png')
-
-        @meta = {
-            "title" => meta_data['title'] || default_title,
-            "description" => meta_data['description'] || default_description,
-            "image" => ("#{meta_data['image'] || default_image}"),
-            "url" => (meta_data['url'] || 'http://www.sanantoniovoterguide.org'),
-            "twitter_name" => 'movesanantonio',
-            "twitter_hashtag" => 'sanantoniovotes',
-        }
+        base_hash = Hash[ @base.to_h.map{ |k,v| [k.to_s, v] } ]
+        @meta = base_hash.update(meta_data || {})
+        unless @meta['image'].index(@base.url)
+            @meta['image'] = URI.join(@base.url, @meta['image'])
+        end
         render('_meta.erb')
     end
 
@@ -48,47 +33,26 @@ class Controller
         @filename
     end
 
+    def load_config
+        @base = OpenStruct.new JSON::parse(File.read('data/config.json'))
+    end
+
     def index
         @meta_partial = set_meta
-        candidates, @questions = candidates_data
-        @mayors = candidates.select{ |can| can['office'] == 'mayor' }
-        @counselors = candidates.reject{ |can| can['office'] == 'mayor' }
-        @counselors =  @counselors.group_by{ |can| can['office'] }
-        @measures = measures_data
+        @districts, @questions = candidate_data
     end
 
-    def measure measure
-        base = "http://www.sanantoniovoterguide.org"
-
-        @anchor =  (measure['title'].downcase.gsub(' ','-')
-                    .gsub(/[^a-zA-Z0-9\-]/,''))
-        @filename = "measure/#{measure['choice']}-#{@anchor}"
-        @meta_partial = set_meta({
-            'url' => "#{base}/sharing/#{@filename}",
-            'image' => "#{base}/images/#{measure['choice']}.png",
-            'title' => "Vote #{measure['choice']} for #{measure['title']}",
-            'description' => ("I'm supporting #{measure['choice']} on "
-                              "#{measure['title']}. A "+
-                              "#{measure['choice']} Vote means: "+
-                              "#{measure['explanation']}"),
-        })
-    end
-
-    def candidate candidate
-        base = "http://www.sanantoniovoterguide.org"
-
+    def candidates candidate
         name = candidate['name']
         link = name.downcase.gsub(' ','-').gsub(/[^a-zA-Z0-9\-]/,'')
-        @anchor =  "@!#{candidate['name']}"
-        @filename = "candidate/#{candidate['office']}-#{link}"
-
+        office = candidate['office']
+        @anchor =  "@#{candidate['office']}"
+        @filename = "candidates/#{candidate['ward']}-#{link}"
         @meta_partial = set_meta({
-            'url' => "#{base}/sharing/#{@filename}",
-            'image' => "#{base}/#{candidate['photo']}",
-            'title' => "Vote #{name} for #{candidate['office display name']}",
-            'description' => ("I'm supporting #{name} for "+
-                              "#{candidate['office display name']} - and "+
-                              "you should too"),
+            'url' => "#{@base.url}/sharing/#{@filename}",
+            'image' => "#{@base.url}/#{candidate['photo']}",
+            'title' => "Vote #{name} for Ward #{office}",
+            'description' => "Vote #{name} for #{office} - and you should too",
         })
     end
 
