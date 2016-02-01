@@ -1606,7 +1606,7 @@ body {
 
 .candidate {
   width: 50%;
-  min-height: 120px;
+  min-height: 200px;
   margin-bottom: 50px; }
   @media screen and (max-width: 480px) {
     .candidate {
