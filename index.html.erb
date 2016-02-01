@@ -13,9 +13,9 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1><%= @title %></h1>
+      <h1><%= @base.title %></h1>
       <h1 class="big">Voter Guide</h1>
-      <h1>Vote by <%= @election_day %></h1>
+      <h1>Vote by <%= @base.date %></h1>
     </div>
     <div class="section">
       <div class="inner">
@@ -45,13 +45,47 @@
         </div>
       </div>
   </div>
-  <div class="section">
-    <div class="inner"></div>
-  </div>
+  <% @contests.each do |contest| %>
+    <div class="section">
+      <div class="inner">
+        <h2><%= contest %></h2>
+        <p>When casting your ballot you will be able to select which party's primary you would like to participate in</p>
+        <% %w{DEM REP}.each do |party| %>
+          <% the_candidates = @candidates.select do |cand|
+              cand['office'] == contest && cand['party'] == party
+             end
+             next if the_candidates.empty?
+          %>
+          <div class="clear" id="<%= contest %>-<%= party %>">
+            <h3><%= party_name party %> Primary</h3>
+            <% the_candidates.each do |candidate| %>
+              <div class="candidate <%= "row-#{[nil,1,2][@candidates.length]}" if @candidates.length < 3 %>">
+                <h2><%= candidate['name'] %></h2>
+                <% if candidate['image url'] %>
+                  <div class="img" style="background-image: url('<%= candidate["image url"] %>');" ></div>
+                <% end %>
+                <div class="social">
+                  <% if candidate['website'] %>
+                    <a target="_blank" class="fa fa-link" href="<%= candidate['website'] %>">
+                      Website
+                    </a>
+                  <% end %>
+                  <% if candidate['facebook'] %>
+                    <a target="_blank" class="fa fa-facebook-square" href="<%= candidate['facebook'] %>">
+                    Facebook
+                    </a>
+                  <% end %>
+                </div>
+                <a class="vote_for" data-name="<%= candidate["name"] %>" data-link="/sharing/candidates/<%= make_uri contest %>-<%= make_uri candidate['name'] %>.html" data-office="<%= contest %>" onclick="endorsementWidget(this)">endorse</a>
+              </div>
+            <% end %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 
-  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
-  <script type="text/javascript" src="/javascripts/turf.min.js"></script>
-  <script type="text/javascript" src="/javascripts/tinyxhr.js"></script>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
   <script type="text/javascript" src="/javascripts/main.js"></script>
 
   <script>
@@ -65,7 +99,7 @@
 
   </script>
 
-  <div id="popup_config" data-url="http://www.denvervoterguide.org/form.html" data-key="1MyYumXw-2x1QSho1RMYLrfYJAWaA8kv3b9idjHDTmKc" data-phone_name="entry.1180421525" data-zip_name="entry.229449272" data-optin_name="entry.1797815415"></div><script src="http://www.denvervoterguide.org/javascripts/popup.js"></script>
+  <div id="popup_config" data-url="http://localhost:8080/form.html" data-key="11gIAy-7VrwbFO-TjyVd-F-o7yML8TysIklMcU5mQ3-w" data-phone_name="entry.631820209" data-name_name="entry.1134003853" data-address_name="entry_1280791249" data-optin_name="entry.1600376037"></div><script src="http://localhost:8080/javascripts/popup.js"></script>
 
 </body>
 </html>

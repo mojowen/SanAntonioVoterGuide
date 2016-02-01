@@ -1,11 +1,11 @@
 {
 	"url": "http://www.sanantoniovoterguide.org",
 	"title": "2016 San Antonio Primary Voter Guide",
-	"description": "Vote by Tuesday, November 3rd in the Primary Election. Check out our voter guide to see who'll be on your ballot.",
+	"description": "Vote by Tuesday, March 1st in the Primary Election. Check out our voter guide to see who'll be on your ballot.",
 	"image": "/images/shareable.png",
 	"twitter_name": "movesana",
 	"twitter_hashtag": "sanantoniovotes",
-	"date": "Tuesday, February 15th",
+	"date": "Tuesday, March 1st",
 	"repo": "https://github.com/mojowen/SanAntonioVoterGuide",
 	"city": "San Antonio",
 	"state": "Texas",

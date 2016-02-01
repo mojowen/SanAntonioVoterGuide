@@ -28,7 +28,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.10)
     formatador (0.2.5)
-    gridle (2.0.44)
+    gridle (2.0.0)
       sass (>= 3.3.0)
     guard (2.13.0)
       formatador (>= 0.2.4)

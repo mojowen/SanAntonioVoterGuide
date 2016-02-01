@@ -42,7 +42,7 @@ def download_csv_photos filename
     end
 end
 task :candidates do
-    # download_csv_photos 'candidates'
+    download_csv_photos 'candidates'
     csv_to_json 'candidates'
 end
 task :erb, :paths do |t,args|
@@ -74,10 +74,10 @@ task :all => [:candidates] do
 end
 
 task :sharing do
-    candidates, _ = candidates_data
+    candidates = candidates_data
 
     build = {
-        'candidate' => candidates,
+        'candidates' => candidates,
     }
 
     FileUtils.rm_r 'sharing' if Dir.exists?("sharing")

@@ -245,20 +245,18 @@
     }
 
     document.body.onload = function() {
-        search_form.onsubmit = searchSubmit;
+        var search_form_exists = typeof search_form !== 'undefined'
+        if( search_form_exists ) {
+            search_form.onsubmit = searchSubmit;
+        }
 
         if( document.location.hash.length > 0 ) {
-            if( document.location.hash[1] != '!' ) {
+            if( document.location.hash[1] != '!' && search_form_exists ) {
                 search_form.address.value = document.location.hash.replace('#','').replace(/\+/g,' ')
                 searchSubmit.apply(search_form)
             } else {
                 if( document.location.hash[2] == '@') {
-                    when_ready( function() {
-                        specifyWard(document.location.hash.replace(/[^0-9]/g,''))
-                        var old_link = document.location.hash
-                        document.location.hash = 'counselors' // Hack to make it scroll
-                        document.location.hash = old_link
-                    });
+                    document.location.hash = document.location.hash.slice(3, document.location.hash.length)
                 }
             }
         }
