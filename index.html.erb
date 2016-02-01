@@ -66,12 +66,14 @@
                 <% end %>
                 <div class="social">
                   <% if candidate['website'] %>
-                    <a target="_blank" class="fa fa-link" href="<%= candidate['website'] %>">
+                    <a target="_blank" href="<%= candidate['website'] %>">
+                      <i  class="fa fa-link"></i>
                       Website
                     </a>
                   <% end %>
                   <% if candidate['facebook'] %>
-                    <a target="_blank" class="fa fa-facebook-square" href="<%= candidate['facebook'] %>">
+                    <a target="_blank" href="<%= candidate['facebook'] %>">
+                    <i class="fa fa-facebook-square"></i>
                     Facebook
                     </a>
                   <% end %>
