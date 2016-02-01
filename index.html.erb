@@ -49,7 +49,7 @@
     <div class="section">
       <div class="inner">
         <h2><%= contest %></h2>
-        <p>When casting your ballot you will be able to select which party's primary you would like to participate in</p>
+        <p>When casting your ballot, you will be able to choose one party's primary to participate in.</p>
         <% %w{DEM REP}.each do |party| %>
           <% the_candidates = @candidates.select do |cand|
               cand['office'] == contest && cand['party'] == party
@@ -61,9 +61,7 @@
             <% the_candidates.each do |candidate| %>
               <div class="candidate <%= "row-#{[nil,1,2][@candidates.length]}" if @candidates.length < 3 %>">
                 <h2><%= candidate['name'] %></h2>
-                <% if candidate['image url'] %>
-                  <div class="img" style="background-image: url('<%= candidate["image url"] %>');" ></div>
-                <% end %>
+                <div class="img" style="background-image: url('<%= candidate["image url"] || 'images/unknown.jpg' %>');" ></div>
                 <div class="social">
                   <% if candidate['website'] %>
                     <a target="_blank" href="<%= candidate['website'] %>">
